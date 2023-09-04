@@ -78,6 +78,7 @@ function Profile() {
     const errors = validateForm();
     console.log(formData,'-form data in the next')
     console.log('inside handle next');
+    console.log('data of birth',formData.dateOfBirth)
     if (true) {
       dispatch(add(formData));
       navigate('/saveprofile');
@@ -85,6 +86,7 @@ function Profile() {
       setFormErrors(errors);
     }
   };
+
   const handleChange = (event) => {
     console.log(event.target.value);
     const { name, value } = event.target;
@@ -171,63 +173,56 @@ function Profile() {
 
     return errors;
   };
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log('handle submit');
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   console.log('handle submit');
 
-    // Validate all fields before submission
-    const fieldNames = Object.keys(formData);
-    const fieldErrors = {};
+  //   // Validate all fields before submission
+  //   const fieldNames = Object.keys(formData);
+  //   const fieldErrors = {};
 
-    fieldNames.forEach((name) => {
-      validateField(name, formData[name]);
-      fieldErrors[name] = formErrors[name];
-    });
-    console.log('The form data is ', formData);
-    setFormErrors(fieldErrors);
+  //   fieldNames.forEach((name) => {
+  //     validateField(name, formData[name]);
+  //     fieldErrors[name] = formErrors[name];
+  //   });
+  //   console.log('The form data is ', formData);
+  //   setFormErrors(fieldErrors);
 
-    try {
-      console.log('inside the try of the axios');
+  //   try {
+  //     console.log('inside the try of the axios');
 
-      ProfileService.saveProfile(formData).then((response) => {
-        console.log('Data is saved sucessfully--------------------------');
-        setFormData({
-          first_name: '',
-          last_name: '',
-          city: '',
-          email: '',
-          contact: '',
-          gender: '',
-          blood_group: '',
-          birth_date: '',
-          license_number: '',
-          experiance: '',
-          passout_year: '',
-          university: '',
-          degree: '',
-          biography: '',
-          specialization: '',
-          profilePicture: '',
-        });
-      });
+  //     ProfileService.saveProfile(formData).then((response) => {
+  //       console.log('Data is saved sucessfully--------------------------');
+  //       setFormData({
+  //         first_name: '',
+  //         last_name: '',
+  //         city: '',
+  //         email: '',
+  //         contact: '',
+  //         gender: '',
+  //         blood_group: '',
+  //         birth_date: '',
+  //         license_number: '',
+  //         experiance: '',
+  //         passout_year: '',
+  //         university: '',
+  //         degree: '',
+  //         biography: '',
+          
+  //         profilePicture: '',
+  //       });
+  //     });
 
-      console.log(formData);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-  };
+  //     console.log(formData);
+  //   } catch (error) {
+  //     console.error('Error submitting form:', error);
+  //   }
+  // };
 
   const defaultTheme = createTheme();
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
   const genders = ['Male', 'Female', 'Other'];
-  const specializations = [
-    'Cardiologist',
-    'Dermatologist',
-    'Pediatrician',
-    'Orthopedic Surgeon',
-    'Neurologist',
-    'Ophthalmologist',
-  ];
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -419,29 +414,7 @@ function Profile() {
                   </Select>
                   {formErrors.blood_group && <Typography color="error">{formErrors.blood_group}</Typography>}
                 </Grid>
-                <Grid item xs={6}>
-                  <Select
-                    fullWidth
-                    id="specialization"
-                    name="specialization"
-                    value={formData.specialization}
-                    onChange={handleChange}
-                    displayEmpty
-                    renderValue={(selected) => selected || 'Select specialization'}
-                    error={formErrors.specialization !== ''}
-                    InputLabelProps={{
-                      shrink: true, // This property prevents label from overlapping with content
-                    }}
-                  >
-                    <MenuItem value="">Select specialization</MenuItem>
-                    {specializations.map((specialization) => (
-                      <MenuItem key={specialization} value={specialization}>
-                        {specialization}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {formErrors.specialization && <Typography color="error">{formErrors.specialization}</Typography>}
-                </Grid>
+            
                 <Grid item xs={6}>
                   <DatePicker
                     fullWidth

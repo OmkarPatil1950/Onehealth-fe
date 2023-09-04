@@ -38,7 +38,7 @@ export default function ViewMore({ AppointmentStatus, IconToDisplay, GeneratePdf
     async function fetchData() {
       try {
         const patientResponse = await fetch(
-          `https://apigateway-yjb28-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/patientProfile/123`
+          `https://apigateway-yjb28-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/patientProfile/byPatientId/67`
         );
         const patientData = await patientResponse.json();
         setPatientdetails(patientData);

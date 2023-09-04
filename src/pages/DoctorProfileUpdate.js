@@ -34,7 +34,7 @@ function UpdateProfile() {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await ProfileService.getProfile(153);
+        const response = await ProfileService.getProfile(304);
         const data = response.data;
         console.log('data is ->', data);
         setProfile(data);
@@ -55,12 +55,12 @@ function UpdateProfile() {
           university: data.university || '',
           degree: data.degree || '',
           biography: data.biography || '',
-          specialization: data.specialization || '',
           // profilePicture: data.profilePicture || '',
         //   aadharId:'0',
         //   medicalCertId:'1',
         //   panId:'3',
         //   photoId:'7',
+        specializations:data.specializations || '',
         });
       } catch (error) {
         console.error('Error fetching profile:', error);

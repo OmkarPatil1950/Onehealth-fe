@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
 import { Paper, Typography, Box, Container, Avatar, Button } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 import ProfileService from '../Service/ProfileService';
+import { add } from '../store/profileSlice';
 
 const Layout = styled('div')(({ theme }) => ({
   marginLeft: '20px',
@@ -47,6 +48,7 @@ const EditButton = styled(Button)({
 });
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const logoSrc = 'URL_TO_LOGO_IMAGE'; // Replace with the actual logo image URL
   const [profile, setProfile] = useState([]);
@@ -55,7 +57,7 @@ const Profile = () => {
     const fetchAvailableLocations = async () => {
       console.log('---------------------------fectching profile');
       try {
-        const response = await ProfileService.getProfile(153);
+        const response = await ProfileService.getProfile(304);
         const data = response.data; // Assuming the response data is an array of location objects
         // const ProDta = data.map((location) => location.address);
         console.log(data);
@@ -77,7 +79,7 @@ const Profile = () => {
   const handleProfile = () => {
     const serializedProfile = JSON.stringify(profile);
     sessionStorage.setItem('profile', serializedProfile);
-
+    dispatch(add(profile));
     navigate('/updateprofile', { state: { profileData: profile } });
   };
   return (
@@ -134,12 +136,6 @@ const Profile = () => {
 
           <FieldWrapper>
             <Typography>
-              <strong>Specialization:</strong> {profile.specialization}
-            </Typography>
-          </FieldWrapper>
-
-          <FieldWrapper>
-            <Typography>
               <strong>City:</strong> {profile.city}
             </Typography>
           </FieldWrapper>
@@ -179,6 +175,24 @@ const Profile = () => {
               <strong>Experience:</strong> {profile.experiance}
             </Typography>
           </FieldWrapper>
+          <FieldWrapper>
+            <Typography>
+              <strong>Consultation Fees:</strong> {profile.consultationFees}
+            </Typography>
+          </FieldWrapper>
+
+          {profile.specializations && profile.specializations.length > 0 && (
+            <FieldWrapper>
+              <Typography>
+                <strong>Specializations:</strong>
+                <ul>
+                  {profile.specializations.map((spec, index) => (
+                    <li key={index}>{spec.name}</li>
+                  ))}
+                </ul>
+              </Typography>
+            </FieldWrapper>
+          )}
 
           <EditButton variant="contained" color="primary" onClick={handleProfile}>
             Edit

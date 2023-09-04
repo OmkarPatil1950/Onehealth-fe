@@ -33,6 +33,7 @@ import AddressCard from './pages/showAddress';
 import UpdateDoctorForm from './pages/updateAddress';
 import DisplaySchedule from './pages/DisplaySchedule';
 import UpdateDoctorSchedulePage from './pages/updateSchedule';
+import UpdateSpecialization from './pages/updateSpecialization';
 /// ----------------------------------------------------------------------
 
 export default function Router() {
@@ -67,6 +68,7 @@ export default function Router() {
         { path: 'updateaddress', element: <UpdateDoctorForm/> },
         { path: 'myschedule', element: <DisplaySchedule/> },
         { path: 'updateschedule', element: <UpdateDoctorSchedulePage/> },
+        { path: 'updatespeciality', element: <UpdateSpecialization/> },
       ],
     },
    

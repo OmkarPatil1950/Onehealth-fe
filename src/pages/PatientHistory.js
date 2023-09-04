@@ -41,7 +41,7 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortColumn, setSortColumn] = useState('patient_name');
   const [sortDirection, setSortDirection] = useState('asc');
-  // const [appointmentsData, setAppointmentsData] = useState([]);
+  const [appointmentsData, setAppointmentsData] = useState([]);
   const [loading, setLoading] = useState(true); // New loading state
 
   const handleChangePage = (event, newPage) => {
@@ -64,39 +64,39 @@ export default function StickyHeadTable() {
 
   const upcomingIcon = <CheckCircleTwoToneIcon style={{ color: 'green' }} />;
 
-  // useEffect(() => {
-  //   const fetchAvailableLocations = async () => {
-  //     try {
-  //       const response = await CompletedAppointmentService.getCompletedAppointment(3);
-  //       const data = response.data;
-  //       console.log(data);
-  //       setAppointmentsData(data);
-  //     } catch (error) {
-  //       console.error('Error fetching available locations:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchAvailableLocations = async () => {
+      try {
+        const response = await CompletedAppointmentService.getCompletedAppointment(304);
+        const data = response.data;
+        console.log(data);
+        setAppointmentsData(data);
+      } catch (error) {
+        console.error('Error fetching available locations:', error);
+      }
+    };
 
-  //   fetchAvailableLocations();
-  // }, []);
-  const appointmentsData = [
-    {
-      patient_name: 'John Doe',
-      date: '2023-08-31',
-      appointment_time: '09:00 AM',
-      type: 'Offline',
-      // pdfLink: 'path/to/pdf1.pdf',
-      code: 1,
-    },
-    {
-      patient_name: 'Jane Smith',
-      date: '2023-09-01',
-      appointment_time: '02:30 PM',
-      type: 'Online',
-      // pdfLink: 'path/to/pdf2.pdf',
-      code: 2,
-    },
-    // ... more appointments
-  ];
+    fetchAvailableLocations();
+  }, []);
+  // const appointmentsData = [
+  //   {
+  //     patient_name: 'John Doe',
+  //     date: '2023-08-31',
+  //     appointment_time: '09:00 AM',
+  //     type: 'Offline',
+  //     // pdfLink: 'path/to/pdf1.pdf',
+  //     code: 1,
+  //   },
+  //   {
+  //     patient_name: 'Jane Smith',
+  //     date: '2023-09-01',
+  //     appointment_time: '02:30 PM',
+  //     type: 'Online',
+  //     // pdfLink: 'path/to/pdf2.pdf',
+  //     code: 2,
+  //   },
+  //   // ... more appointments
+  // ];
 
   if (appointmentsData.length === 0) { // Check if there's no data in appointmentsData
     return (

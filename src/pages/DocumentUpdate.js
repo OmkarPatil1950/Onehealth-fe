@@ -1,6 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
@@ -25,6 +35,7 @@ const DocumentSave = () => {
   const [aadharcard, setadharId] = useState('');
   const [pancard, setpanId] = useState('');
   const [medicalcert, setMedicalpanId] = useState('');
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const [files, setFiles] = useState({
     aadharId: null,
@@ -48,28 +59,56 @@ const DocumentSave = () => {
   const handleFeesChange = (event) => {
     setFees(event.target.value);
   };
-  const profileStore = useSelector((state) => state.Profile);
 
-  console.log(profileStore, '-----------PROFILESTORE');
+  const profileData = useSelector((state) => state.Profile[0]);
+  console.log(profileData, '-----------uploaded');
+
+  let profileStore = {};
+
+  try {
+    profileStore = JSON.parse(profileData);
+  } catch (error) {
+    console.error('Error parsing profile data:', error);
+  }
+  console.log(profileStore.data, '-data'); // Access the 'data' property of the 'Profile' slice
+
   // const updatedData = [...profileStore.data, files];
+  const dateOfBirth = profileData.specializations;
+
+  console.log(profileStore.specializations, '*-----------dob from store');
+  // Function to handle checkbox changes
+  const handleCheckboxChange = (event) => {
+    const selectedValue = event.target.value;
+    if (event.target.checked) {
+      // Checkbox is checked, add the selected value to the array
+      setSelectedCheckboxes((prevSelected) => [...prevSelected, selectedValue]);
+    } else {
+      // Checkbox is unchecked, remove the selected value from the array
+      setSelectedCheckboxes((prevSelected) => prevSelected.filter((value) => value !== selectedValue));
+    }
+  };
+  console.log(selectedCheckboxes, 'selected checkbox');
 
   const Profilepayload = {
-    first_name: profileStore[0].first_name || '',
-    last_name: profileStore[0].last_name || '',
-    city: profileStore[0].city || '',
-    email: profileStore[0].email || '',
-    contact: profileStore[0].contact || '',
-    gender: profileStore[0].gender || '',
-    blood_group: profileStore[0].blood_group || '',
-    birth_date: profileStore[0].birth_date || null, // Use null or a valid date
-    license_number: profileStore[0].license_number || '',
-    experiance: profileStore[0].experiance || '',
-    passout_year: profileStore[0].passout_year || '',
-    university: profileStore[0].university || '',
-    degree: profileStore[0].degree || '',
-    biography: profileStore[0].biography || '',
-    specialization: profileStore[0].specialization || '',
+    first_name: profileData.first_name || '',
+    last_name: profileData.last_name || '',
+    city: profileData.city || '',
+    email: profileData.email || '',
+    contact: profileData.contact || '',
+    gender: profileData.gender || '',
+    blood_group: profileData.blood_group || '',
+    birth_date: profileData.dateOfBirth || null, // Use null or a valid date
+    license_number: profileData.license_number || '',
+    experiance: profileData.experiance || '',
+    passout_year: profileData.passout_year || '',
+    university: profileData.university || '',
+    degree: profileData.degree || '',
+    biography: profileData.biography || '',
+    panId: pancard,
+    aadharId: aadharcard,
+    medicalCertId: medicalcert,
     consultationFees: fees,
+    specializations: selectedCheckboxes.map((name) => ({ name })),
   };
   console.log(Profilepayload, '-----------profile');
   // const combinedData = {
@@ -79,12 +118,14 @@ const DocumentSave = () => {
   // console.log('Combined Data:', updatedData);
   const handleFileUpload = () => {
     // console.log('Uploaded Files:', files);
+    console.log(selectedCheckboxes, 'selected checkbox');
 
     try {
+      const id = 304;
       console.log('inside the try of the axios');
-      console.log(Profilepayload)
-      ProfileService.updateProfile(153,Profilepayload).then((response) => {
-        console.log('Data is updated sucessfully--------------------------');
+      console.log(Profilepayload);
+      ProfileService.updateProfile(id, Profilepayload).then((response) => {
+        console.log('Data is saved sucessfully--------------------------');
       });
 
       // console.log(combinedData);
@@ -111,7 +152,6 @@ const DocumentSave = () => {
 
               <input type="file" accept="image/*,.pdf" onChange={handleaadharIdChange} />
             </Grid>
-
             <Grid item xs={12}>
               <Typography variant="h5">
                 <img
@@ -124,7 +164,6 @@ const DocumentSave = () => {
 
               <input type="file" accept="image/*,.pdf" onChange={handlepanIdChange} />
             </Grid>
-
             <Grid item xs={12}>
               <Typography variant="h5">
                 <img
@@ -137,8 +176,19 @@ const DocumentSave = () => {
 
               <input type="file" accept="image/*,.pdf" onChange={handleMedicalCertificateChange} />
             </Grid>
-            <Typography variant="h6">Consulataion Fees : </Typography>
-            <TextField name="fees" type="number" value={fees} onChange={handleFeesChange} inputProps={{ min: 0 }} />
+            <Grid item xs={12}>
+              <Typography variant="h6">Consulataion Fees : </Typography>
+              <TextField
+                id="standard-size-small"
+                size="small"
+                variant="standard"
+                name="fees"
+                type="number"
+                value={fees}
+                onChange={handleFeesChange}
+                inputProps={{ min: 0 }}
+              />
+            </Grid>{' '}
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary" onClick={handleFileUpload}>
                 Upload Files
